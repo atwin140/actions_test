@@ -1,0 +1,35 @@
+name: Process File for cURL and Save Output
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  curl-job:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the repository to access files
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Read the address from the file
+      - name: Extract address from file
+        id: extract_address
+        run: |
+          # Read the first line of the file and store it in an environment variable
+          ADDRESS=$(cat address.txt)
+          echo "ADDRESS=$ADDRESS" >> $GITHUB_ENV
+
+      # Use the extracted address in a cURL command and save output to a file
+      - name: Perform cURL request and save output
+        run: |
+          curl ${{ env.ADDRESS }} > curl_output.txt
+          echo "cURL output saved to curl_output.txt"
+
+      # Upload the output file as an artifact (optional)
+      - name: Upload cURL output as an artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: curl-output
+          path: curl_output.txt
