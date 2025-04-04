@@ -1,1 +1,1 @@
-bot.whatismyipaddress.com
+curlmyip.net
