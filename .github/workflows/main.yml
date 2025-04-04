@@ -1,0 +1,26 @@
+name: Process File for cURL
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  curl-job:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the repository to access files
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Read the address from the file
+      - name: Extract address from file
+        id: extract_address
+        run: |
+          # Read the first line of the file and store it in an environment variable
+          ADDRESS=$(cat address.txt)
+          echo "ADDRESS=$ADDRESS" >> $GITHUB_ENV
+
+      # Use the extracted address in a cURL command
+      - name: Perform cURL request
+        run: curl ${{ env.ADDRESS }}
